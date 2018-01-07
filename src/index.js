@@ -30,48 +30,62 @@ const styles = {
   }
 };
 
-console.log(data.habits)
+console.log(data)
 
-const H = withStyles(styles)(props => {
-  return (
-    <Card className={props.classes.H}>
-      <CardContent>
-        <Typography>{props.routine}</Typography>
-        <Calendar 
-          itemColor={date => {
-            if (date.isSame('2017-12-31')) {
-              console.log(date.format())
-              return '#000000';
-            }
-          }}
-          today={moment('20180104')}
-        />
-      </CardContent>
-    </Card>
-  );
-});
+const H = withStyles(styles)(
+  class extends React.Component {
+    render() {
+      const props = this.props;
+      return (
+        <Card className={props.classes.H}>
+          <CardContent>
+            <Typography>{props.routine}</Typography>
+            <Calendar 
+              itemColor={this.getItemColor}
+              today={moment('20180104')}
+            />
+          </CardContent>
+        </Card>
+      );
+    }
+    
+    getItemColor = date => {
+      const props = this.props;
+      if (props.history.find(x => 
+        moment(x.when).isSame(date, 'day'))) {
+        return '#ee11ee';
+      }
+      if (date.isSame('2017-12-31')) {
+        console.log(date.format())
+        return '#000000';
+      }}
+    }
+);
 
-const App = withStyles(styles)(function({classes}) {
-  return (
-    <div>
-      <AppBar>
-        <Toolbar>
-          <Typography type='title' color='inherit'>
-            Title
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      
-      <div className={classes.content}>
-        {
-          data.habits.map(h => <H {...h} />)
-        } 
+const App = withStyles(styles)(
+  function(props) {
+    const { classes, data } = props;
+    return (
+      <div>
+        <AppBar>
+          <Toolbar>
+            <Typography type='title' color='inherit'>
+              Title
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        <div className={classes.content}>
+          {
+            data.habits.map(h => <H {...h} />)
+          } 
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
-render(<App />, document.querySelector('#root'));
+render(<App data={data} />, document.querySelector('#root'));
 
 
 
