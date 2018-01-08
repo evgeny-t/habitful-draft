@@ -7,6 +7,8 @@ import Button from 'material-ui-next/Button';
 import AppBar from 'material-ui-next/AppBar';
 import Toolbar from 'material-ui-next/Toolbar';
 import Typography from 'material-ui-next/Typography';
+import IconButton from 'material-ui-next/IconButton';
+import AccountCircle from 'material-ui-icons-next/AccountCircle';
 import Card, { CardActions, CardContent } from 'material-ui-next/Card';
 import { withStyles } from 'material-ui-next/styles';
 
@@ -27,7 +29,10 @@ const styles = {
     // border: '2px solid black',
     // width: 200,
     margin: 10,
-  }
+  },
+  flex: {
+    flex: 1,
+  },
 };
 
 console.log(data)
@@ -69,9 +74,18 @@ const App = withStyles(styles)(
       <div>
         <AppBar>
           <Toolbar>
-            <Typography type='title' color='inherit'>
+            <Typography 
+              type='title' 
+              color='inherit'
+              className={classes.flex}
+            >
               Title
             </Typography>
+            <IconButton
+              color='contrast'
+            >
+             <AccountCircle></AccountCircle>
+            </IconButton>
           </Toolbar>
         </AppBar>
 
