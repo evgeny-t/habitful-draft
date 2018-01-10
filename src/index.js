@@ -1,4 +1,4 @@
-
+import _ from 'lodash';
 import React from 'react';
 import { render } from 'react-dom';
 import moment from 'moment';
@@ -10,10 +10,18 @@ import Typography from 'material-ui-next/Typography';
 import IconButton from 'material-ui-next/IconButton';
 import AccountCircle from 'material-ui-icons-next/AccountCircle';
 import Card, { CardActions, CardContent } from 'material-ui-next/Card';
+import List, { 
+  ListItem, 
+  ListItemSecondaryAction, 
+  ListItemText 
+} from 'material-ui-next/List';
+import Checkbox from 'material-ui-next/Checkbox';
 import { withStyles } from 'material-ui-next/styles';
 
 import * as data from './data.json';
 import { Calendar } from './Calendar';
+
+// console.log(data)
 
 const styles = {
   content: {
@@ -35,7 +43,16 @@ const styles = {
   },
 };
 
+const TODAY = '2017-12-31';
+
 console.log(data)
+
+// const todo = _.reduce(data.habits, (acc, habit) => {
+//   habit.history.sort();
+//   const todo = !moment(_.last(habit.history)).isSame(TODAY, 'day')
+//   return _.set(acc, habit._id, todo);
+// }, {});
+
 
 const H = withStyles(styles)(
   class extends React.Component {
@@ -60,7 +77,7 @@ const H = withStyles(styles)(
         moment(x.when).isSame(date, 'day'))) {
         return '#ee11ee';
       }
-      if (date.isSame('2017-12-31')) {
+      if (date.isSame(TODAY)) {
         console.log(date.format())
         return '#000000';
       }}
@@ -70,6 +87,7 @@ const H = withStyles(styles)(
 const App = withStyles(styles)(
   function(props) {
     const { classes, data } = props;
+    console.log(classes)
     return (
       <div>
         <AppBar>
@@ -88,6 +106,25 @@ const App = withStyles(styles)(
             </IconButton>
           </Toolbar>
         </AppBar>
+
+        <List
+          dense
+        >
+          {
+            _(data.habits)
+              .filter(h => 
+                !moment(_.last(h.history)).isSame(TODAY, 'day'))
+              .map(h => (
+                <ListItem>
+                  <Checkbox />
+                  <ListItemText 
+                    primary={`${h.routine}`}
+                  />
+                </ListItem>
+              ))
+              .value()            
+          }
+        </List>
 
         <div className={classes.content}>
           {
