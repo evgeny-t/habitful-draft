@@ -27,17 +27,11 @@ import { withStyles } from 'material-ui-next/styles';
 import * as data from './data.json';
 import { Calendar } from './Calendar';
 
-// console.log(data)
+data.habits.forEach(h => h.history.forEach(entry => entry.when = moment(entry.when)));
 
 const TODAY = '2017-12-31';
 
 console.log(data)
-
-// const todo = _.reduce(data.habits, (acc, habit) => {
-//   habit.history.sort();
-//   const todo = !moment(_.last(habit.history)).isSame(TODAY, 'day')
-//   return _.set(acc, habit._id, todo);
-// }, {});
 
 
 const HabitCard = withStyles({
@@ -69,8 +63,9 @@ const HabitCard = withStyles({
 
     getItemColor = date => {
       const props = this.props;
+      // TODO(ET): should not be O(n)
       if (props.history.find(x =>
-        moment(x.when).isSame(date, 'day'))) {
+        x.when.isSame(date, 'day'))) {
         return '#ee11ee';
       }
       if (date.isSame(TODAY)) {
