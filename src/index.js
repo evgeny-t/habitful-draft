@@ -3,6 +3,12 @@ import React from 'react';
 import { render } from 'react-dom';
 import moment from 'moment';
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
+
 import Button from 'material-ui-next/Button';
 import AppBar from 'material-ui-next/AppBar';
 import Toolbar from 'material-ui-next/Toolbar';
@@ -47,7 +53,11 @@ const HabitCard = withStyles({
       return (
         <Card className={props.classes.H}>
           <CardContent>
-            <Typography>{props.routine}</Typography>
+            <Typography>
+              <Link to={`/${_.kebabCase(props.routine)}`}>
+                {props.routine}
+              </Link>
+            </Typography>
             <Calendar
               itemColor={this.getItemColor}
               today={moment('20180104')}
@@ -182,19 +192,21 @@ const App = withStyles({
     const { classes, data } = props;
     console.log(classes)
     return (
-      <div>
-        <Header />
+      <Router>
+        <div>
+          <Header />
 
-        <Content>
-          <Checklist {...data} />
-          <div className={classes.habits}>
-            {
-              data.habits.map(h => <HabitCard {...h} />)
-            }
-          </div>
-        </Content>
+          <Content>
+            <Checklist {...data} />
+            <div className={classes.habits}>
+              {
+                data.habits.map(h => <HabitCard {...h} />)
+              }
+            </div>
+          </Content>
 
-      </div>
+        </div>
+      </Router>
     );
   }
   );
