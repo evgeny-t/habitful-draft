@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 
 const styles = theme => ({
   outer: {

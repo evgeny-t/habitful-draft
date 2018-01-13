@@ -1,45 +1,45 @@
-import _ from 'lodash';
-import React from 'react';
-import { render } from 'react-dom';
-import moment from 'moment';
+import _ from "lodash";
+import React from "react";
+import { render } from "react-dom";
+import moment from "moment";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import Button from 'material-ui-next/Button';
-import AppBar from 'material-ui-next/AppBar';
-import Toolbar from 'material-ui-next/Toolbar';
-import Typography from 'material-ui-next/Typography';
-import IconButton from 'material-ui-next/IconButton';
-import AccountCircle from 'material-ui-icons-next/AccountCircle';
-import Card, { CardActions, CardContent } from 'material-ui-next/Card';
+import Button from "material-ui/Button";
+import AppBar from "material-ui/AppBar";
+import Toolbar from "material-ui/Toolbar";
+import Typography from "material-ui/Typography";
+import IconButton from "material-ui/IconButton";
+import AccountCircle from "material-ui-icons/AccountCircle";
+import Card, { CardActions, CardContent } from "material-ui/Card";
 import List, {
   ListItem,
   ListItemSecondaryAction,
   ListItemText
-} from 'material-ui-next/List';
-import Checkbox from 'material-ui-next/Checkbox';
-import { withStyles } from 'material-ui-next/styles';
+} from "material-ui/List";
+import Zoom from 'material-ui/transitions/Zoom';
+import AddIcon from 'material-ui-icons/Add';
+import Checkbox from "material-ui/Checkbox";
+import { withStyles } from "material-ui/styles";
 
-import * as data from './data.json';
-import { Calendar } from './Calendar';
 
-data.habits.forEach(h => h.history.forEach(entry => entry.when = moment(entry.when)));
+import * as data from "./data.json";
+import { Calendar } from "./Calendar";
 
-const TODAY = '2017-12-31';
+data.habits.forEach(h =>
+  h.history.forEach(entry => (entry.when = moment(entry.when)))
+);
 
-console.log(data)
+const TODAY = "2017-12-31";
 
+console.log(data);
 
 const HabitCard = withStyles({
   H: {
     // border: '2px solid black',
     // width: 200,
-    margin: 10,
-  },
+    margin: 10
+  }
 })(
   class extends React.Component {
     render() {
@@ -48,13 +48,11 @@ const HabitCard = withStyles({
         <Card className={props.classes.H}>
           <CardContent>
             <Typography>
-              <Link to={`/${_.kebabCase(props.routine)}`}>
-                {props.routine}
-              </Link>
+              <Link to={`/${_.kebabCase(props.routine)}`}>{props.routine}</Link>
             </Typography>
             <Calendar
               itemColor={this.getItemColor}
-              today={moment('20180104')}
+              today={moment("20180104")}
             />
           </CardContent>
         </Card>
@@ -64,31 +62,30 @@ const HabitCard = withStyles({
     getItemColor = date => {
       const props = this.props;
       // TODO(ET): should not be O(n)
-      if (props.history.find(x =>
-        x.when.isSame(date, 'day'))) {
-        return '#ee11ee';
+      if (props.history.find(x => x.when.isSame(date, "day"))) {
+        return "#ee11ee";
       }
       if (date.isSame(TODAY)) {
-        console.log(date.format())
-        return '#000000';
+        console.log(date.format());
+        return "#000000";
       }
-    }
+    };
   }
-  );
+);
 
 const checklistStyles = {
   root: {
     // border: '1px dashed blue',
-    width: '30%',
+    width: "30%",
     flexShrink: 0,
-    minWidth: '300px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'start',
+    minWidth: "300px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "start"
   },
   list: {
-    maxWidth: '300px',
-  },
+    maxWidth: "300px"
+  }
 };
 
 const Checklist = withStyles(checklistStyles)(
@@ -98,24 +95,16 @@ const Checklist = withStyles(checklistStyles)(
       return (
         <div className={classes.root}>
           <Card>
-            <List
-              dense
-              className={classes.list}
-            >
-              {
-                _(habits)
-                  .filter(h =>
-                    !moment(_.last(h.history)).isSame(TODAY, 'day'))
-                  .map(h => (
-                    <ListItem>
-                      <Checkbox />
-                      <ListItemText
-                        primary={`${h.routine}`}
-                      />
-                    </ListItem>
-                  ))
-                  .value()
-              }
+            <List dense className={classes.list}>
+              {_(habits)
+                .filter(h => !moment(_.last(h.history)).isSame(TODAY, "day"))
+                .map(h => (
+                  <ListItem>
+                    <Checkbox />
+                    <ListItemText primary={`${h.routine}`} />
+                  </ListItem>
+                ))
+                .value()}
             </List>
           </Card>
         </div>
@@ -126,8 +115,8 @@ const Checklist = withStyles(checklistStyles)(
 
 const Header = withStyles({
   flex: {
-    flex: 1,
-  },
+    flex: 1
+  }
 })(
   class extends React.Component {
     render() {
@@ -135,23 +124,21 @@ const Header = withStyles({
         <AppBar>
           <Toolbar>
             <Typography
-              type='title'
-              color='inherit'
+              type="title"
+              color="inherit"
               className={this.props.classes.flex}
             >
               Title
             </Typography>
-            <IconButton
-              color='contrast'
-            >
-              <AccountCircle></AccountCircle>
+            <IconButton color="contrast">
+              <AccountCircle />
             </IconButton>
           </Toolbar>
         </AppBar>
       );
     }
   }
-  );
+);
 
 const Content = withStyles({
   content: {
@@ -159,55 +146,93 @@ const Content = withStyles({
     // height: '100vh',
     // background: '#ff11fe',
 
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row"
     // flexWrap: 'wrap',
-  },
+  }
 })(
   class extends React.Component {
     render() {
       return (
+        <div className={this.props.classes.content}>{this.props.children}</div>
+      );
+    }
+  }
+);
+
+const Home = withStyles({
+  habits: {
+    width: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  }
+})(
+  class extends React.Component {
+    render() {
+      return (
+        <Content>
+          <Checklist {...data} />
+          <div className={this.props.classes.habits}>
+            {data.habits.map(h => <HabitCard {...h} />)}
+          </div>
+        </Content>
+      );
+    }
+  }
+);
+
+const HabitDetails = withStyles({
+  content: {
+    paddingTop: 80
+  }
+})(
+  class extends React.Component {
+    render() {
+      const habitKey = this.props.match.params.habitKey;
+      const habit = _.chain(data.habits)
+        .find(h => _.kebabCase(h.routine) === habitKey)
+        .value();
+      return (
         <div className={this.props.classes.content}>
-          {this.props.children}
+          <HabitCard {...habit} />
+          <List dense className={this.props.classes.list}>
+            {_.chain(habit.history)
+              .takeRight(10)
+              .reverse()
+              .map(entry => (
+                <ListItem>
+                  <Checkbox checked={true} />
+                  <ListItemText primary={`${entry.when.from(TODAY)}`} />
+                </ListItem>
+              ))
+              .value()}
+          </List>
         </div>
       );
     }
   }
-  );
+);
 
 const App = withStyles({
   habits: {
-    width: '100%',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-})(
-  function (props) {
-    const { classes, data } = props;
-    console.log(classes)
-    return (
-      <Router>
-        <div>
-          <Header />
-
-          <Content>
-            <Checklist {...data} />
-            <div className={classes.habits}>
-              {
-                data.habits.map(h => <HabitCard {...h} />)
-              }
-            </div>
-          </Content>
-
-        </div>
-      </Router>
-    );
+    width: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
   }
+})(function(props) {
+  const { classes, data } = props;
+  console.log(classes);
+  return (
+    <Router>
+      <div>
+        <Header />
+        <Route exact path="/" component={Home} />
+        <Route path="/:habitKey" component={HabitDetails} />
+      </div>
+    </Router>
   );
+});
 
-render(<App data={data} />, document.querySelector('#root'));
-
-
-
-
+render(<App data={data} />, document.querySelector("#root"));
