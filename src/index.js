@@ -5,6 +5,7 @@ import moment from "moment";
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Button from "material-ui/Button";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
@@ -34,13 +35,13 @@ const TODAY = "2017-12-31";
 
 console.log(data);
 
-const HabitCard = withStyles({
+const HabitCard = withStyles(theme => ({
   H: {
     // border: '2px solid black',
     // width: 200,
     margin: 10
-  }
-})(
+  },
+}), { withTheme: true })(
   class extends React.Component {
     render() {
       const props = this.props;
@@ -63,7 +64,7 @@ const HabitCard = withStyles({
       const props = this.props;
       // TODO(ET): should not be O(n)
       if (props.history.find(x => x.when.isSame(date, "day"))) {
-        return "#ee11ee";
+        return this.props.theme.palette.secondary['A200'];
       }
       if (date.isSame(TODAY)) {
         console.log(date.format());
@@ -71,7 +72,7 @@ const HabitCard = withStyles({
       }
     };
   }
-);
+  );
 
 const checklistStyles = {
   root: {
@@ -138,7 +139,7 @@ const Header = withStyles({
       );
     }
   }
-);
+  );
 
 const Content = withStyles({
   content: {
@@ -158,7 +159,7 @@ const Content = withStyles({
       );
     }
   }
-);
+  );
 
 const Home = withStyles({
   habits: {
@@ -180,13 +181,18 @@ const Home = withStyles({
       );
     }
   }
-);
+  );
 
-const HabitDetails = withStyles({
+const HabitDetails = withStyles(theme => console.log(theme) || ({
   content: {
     paddingTop: 80
-  }
-})(
+  },
+  fab: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 3,
+    right: theme.spacing.unit * 3,
+  },
+}))(
   class extends React.Component {
     render() {
       const habitKey = this.props.match.params.habitKey;
@@ -208,11 +214,22 @@ const HabitDetails = withStyles({
               ))
               .value()}
           </List>
+          <Zoom
+            appear={false}
+            in={true}
+            timeout={1}
+            enterDelay={1}
+            unmountOnExit
+          >
+            <Button fab className={this.props.classes.fab} color='primary'>
+              <AddIcon />
+            </Button>
+          </Zoom>
         </div>
       );
     }
   }
-);
+  );
 
 const App = withStyles({
   habits: {
@@ -221,7 +238,7 @@ const App = withStyles({
     flexWrap: "wrap",
     justifyContent: "center"
   }
-})(function(props) {
+})(function (props) {
   const { classes, data } = props;
   console.log(classes);
   return (
