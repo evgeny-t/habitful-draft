@@ -192,7 +192,7 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
     bottom: theme.spacing.unit * 3,
     right: theme.spacing.unit * 3,
   },
-}))(
+}), { withTheme: true })(
   class extends React.Component {
     render() {
       const habitKey = this.props.match.params.habitKey;
@@ -215,10 +215,10 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
               .value()}
           </List>
           <Zoom
-            appear={false}
+            appear={true}
             in={true}
-            timeout={1}
-            enterDelay={1}
+            timeout={this.props.theme.transitions.duration.enteringScreen}
+            enterDelay={this.props.theme.transitions.duration.leavingScreen}
             unmountOnExit
           >
             <Button fab className={this.props.classes.fab} color='primary'>
