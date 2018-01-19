@@ -12,6 +12,13 @@ import Toolbar from "material-ui/Toolbar";
 import Typography from "material-ui/Typography";
 import IconButton from "material-ui/IconButton";
 import AccountCircle from "material-ui-icons/AccountCircle";
+import Modal from 'material-ui/Modal';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui/Dialog';
 import Card, { CardActions, CardContent } from "material-ui/Card";
 import List, {
   ListItem,
@@ -194,6 +201,10 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
   },
 }), { withTheme: true })(
   class extends React.Component {
+    state = { 
+      addModalOpen: false,
+    }
+
     render() {
       const habitKey = this.props.match.params.habitKey;
       const habit = _.chain(data.habits)
@@ -221,12 +232,45 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
             enterDelay={this.props.theme.transitions.duration.leavingScreen}
             unmountOnExit
           >
-            <Button fab className={this.props.classes.fab} color='primary'>
+            <Button 
+              fab 
+              className={this.props.classes.fab} 
+              color='primary'
+              onClick={this._handleAddClick}
+            >
               <AddIcon />
             </Button>
           </Zoom>
+
+          <Dialog
+            open={this.state.addModalOpen}
+            onClose={this._handleModalClose}
+          >
+            <DialogTitle>Add Entry</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Add missing entry
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this._handleModalClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this._handleModalClose} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       );
+    }
+
+    _handleAddClick = () => {
+      this.setState({ addModalOpen: true });
+    }
+
+    _handleModalClose = () => {
+      this.setState({ addModalOpen: false });
     }
   }
   );
