@@ -30,7 +30,6 @@ import AddIcon from 'material-ui-icons/Add';
 import Checkbox from "material-ui/Checkbox";
 import { withStyles } from "material-ui/styles";
 
-
 import * as data from "./data.json";
 import { Calendar } from "./Calendar";
 
@@ -242,6 +241,7 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
             </Button>
           </Zoom>
 
+          
           <Dialog
             open={this.state.addModalOpen}
             onClose={this._handleModalClose}
