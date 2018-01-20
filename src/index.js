@@ -5,6 +5,9 @@ import moment from "moment";
 
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
+
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Button from "material-ui/Button";
 import AppBar from "material-ui/AppBar";
@@ -202,6 +205,7 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
   class extends React.Component {
     state = { 
       addModalOpen: false,
+      selectedDay: null,
     }
 
     render() {
@@ -251,6 +255,10 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
               <DialogContentText>
                 Add missing entry
               </DialogContentText>
+              <DayPicker 
+                selectedDays={this.state.selectedDay}
+                onDayClick={this._handleDayClick}
+              />
             </DialogContent>
             <DialogActions>
               <Button onClick={this._handleModalClose} color="primary">
@@ -263,6 +271,12 @@ const HabitDetails = withStyles(theme => console.log(theme) || ({
           </Dialog>
         </div>
       );
+    }
+
+    _handleDayClick = (day, { selected }) => {
+      this.setState({
+        selectedDay: selected ? undefined : day,
+      });
     }
 
     _handleAddClick = () => {
