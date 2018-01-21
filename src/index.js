@@ -35,6 +35,8 @@ import { withStyles } from "material-ui/styles";
 
 import * as data from "./data.json";
 import { Calendar } from "./Calendar";
+import { HabitDetails } from './HabitDetails';
+import { HabitCard } from './HabitCard';
 
 data.habits.forEach(h =>
   h.history.forEach(entry => (entry.when = moment(entry.when)))
@@ -44,44 +46,7 @@ const TODAY = "2017-12-31";
 
 console.log(data);
 
-const HabitCard = withStyles(theme => ({
-  H: {
-    // border: '2px solid black',
-    // width: 200,
-    margin: 10
-  },
-}), { withTheme: true })(
-  class extends React.Component {
-    render() {
-      const props = this.props;
-      return (
-        <Card className={props.classes.H}>
-          <CardContent>
-            <Typography>
-              <Link to={`/${_.kebabCase(props.routine)}`}>{props.routine}</Link>
-            </Typography>
-            <Calendar
-              itemColor={this.getItemColor}
-              today={moment("20180104")}
-            />
-          </CardContent>
-        </Card>
-      );
-    }
 
-    getItemColor = date => {
-      const props = this.props;
-      // TODO(ET): should not be O(n)
-      if (props.history.find(x => x.when.isSame(date, "day"))) {
-        return this.props.theme.palette.secondary['A200'];
-      }
-      if (date.isSame(TODAY)) {
-        console.log(date.format());
-        return "#000000";
-      }
-    };
-  }
-  );
 
 const checklistStyles = {
   root: {
@@ -184,107 +149,10 @@ const Home = withStyles({
         <Content>
           <Checklist {...data} />
           <div className={this.props.classes.habits}>
-            {data.habits.map(h => <HabitCard {...h} />)}
+            {data.habits.map(h => <HabitCard {...h} today={TODAY} />)}
           </div>
         </Content>
       );
-    }
-  }
-  );
-
-const HabitDetails = withStyles(theme => console.log(theme) || ({
-  content: {
-    paddingTop: 80
-  },
-  fab: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 3,
-    right: theme.spacing.unit * 3,
-  },
-}), { withTheme: true })(
-  class extends React.Component {
-    state = { 
-      addModalOpen: false,
-      selectedDay: null,
-    }
-
-    render() {
-      const habitKey = this.props.match.params.habitKey;
-      const habit = _.chain(data.habits)
-        .find(h => _.kebabCase(h.routine) === habitKey)
-        .value();
-      return (
-        <div className={this.props.classes.content}>
-          <HabitCard {...habit} />
-          <List dense className={this.props.classes.list}>
-            {_.chain(habit.history)
-              .takeRight(10)
-              .reverse()
-              .map(entry => (
-                <ListItem>
-                  <Checkbox checked={true} />
-                  <ListItemText primary={`${entry.when.from(TODAY)}`} />
-                </ListItem>
-              ))
-              .value()}
-          </List>
-          <Zoom
-            appear={true}
-            in={true}
-            timeout={this.props.theme.transitions.duration.enteringScreen}
-            enterDelay={this.props.theme.transitions.duration.leavingScreen}
-            unmountOnExit
-          >
-            <Button 
-              fab 
-              className={this.props.classes.fab} 
-              color='primary'
-              onClick={this._handleAddClick}
-            >
-              <AddIcon />
-            </Button>
-          </Zoom>
-
-          
-          <Dialog
-            open={this.state.addModalOpen}
-            onClose={this._handleModalClose}
-          >
-            <DialogTitle>Add Entry</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Add missing entry
-              </DialogContentText>
-              <DayPicker 
-                selectedDays={this.state.selectedDay}
-                onDayClick={this._handleDayClick}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this._handleModalClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this._handleModalClose} color="primary">
-                Add
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      );
-    }
-
-    _handleDayClick = (day, { selected }) => {
-      this.setState({
-        selectedDay: selected ? undefined : day,
-      });
-    }
-
-    _handleAddClick = () => {
-      this.setState({ addModalOpen: true });
-    }
-
-    _handleModalClose = () => {
-      this.setState({ addModalOpen: false });
     }
   }
   );
@@ -304,7 +172,12 @@ const App = withStyles({
       <div>
         <Header />
         <Route exact path="/" component={Home} />
-        <Route path="/:habitKey" component={HabitDetails} />
+        <Route 
+          path="/:habitKey" 
+          component={props => 
+            <HabitDetails {...props} today={TODAY} />
+          } 
+        />
       </div>
     </Router>
   );
