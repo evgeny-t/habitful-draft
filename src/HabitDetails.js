@@ -34,9 +34,8 @@ import Checkbox from "material-ui/Checkbox";
 import { withStyles } from "material-ui/styles";
 
 import * as data from "./data.json";
-import { Calendar } from "./Calendar";
 import { HabitCard } from './HabitCard';
-import { Header } from './Header';
+import { Header } from './components/Header';
 
 export const HabitDetails = withStyles(theme => console.log(theme) || ({
   content: {

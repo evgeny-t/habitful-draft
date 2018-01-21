@@ -18,7 +18,7 @@ import { withStyles } from "material-ui/styles";
 import * as data from "./data.json";
 import { HabitDetails } from './HabitDetails';
 import { HabitCard } from './HabitCard';
-import { Header } from './Header';
+import { Header } from './components/Header';
 
 data.habits.forEach(h =>
   h.history.forEach(entry => (entry.when = moment(entry.when)))
@@ -70,7 +70,49 @@ const Checklist = withStyles(checklistStyles)(
   }
 );
 
-const Content = withStyles({
+const Home = withStyles({
+  habits: {
+    width: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  },
+  content: {
+    paddingTop: 80,
+    // height: '100vh',
+    // background: '#ff11fe',
+
+    display: "flex",
+    flexDirection: "row"
+    // flexWrap: 'wrap',
+  },
+})(
+  class extends React.Component {
+    render() {
+      return (
+        <div>
+          <Header title="habitful" />
+          <div className={this.props.classes.content}>
+            <Checklist {...data} />
+            <div className={this.props.classes.habits}>
+              {data.habits.map(h => <HabitCard {...h} today={TODAY} />)}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+  );
+
+const App = withStyles({
+  habits: {
+    width: "100%",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  }
+})(function (props) {
+  const { classes, data } = props;const Content = withStyles({
   content: {
     paddingTop: 80,
     // height: '100vh',
@@ -90,40 +132,6 @@ const Content = withStyles({
   }
   );
 
-const Home = withStyles({
-  habits: {
-    width: "100%",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  }
-})(
-  class extends React.Component {
-    render() {
-      return (
-        <div>
-          <Header title="habitful" />
-          <Content>
-            <Checklist {...data} />
-            <div className={this.props.classes.habits}>
-              {data.habits.map(h => <HabitCard {...h} today={TODAY} />)}
-            </div>
-          </Content>
-        </div>
-      );
-    }
-  }
-  );
-
-const App = withStyles({
-  habits: {
-    width: "100%",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  }
-})(function (props) {
-  const { classes, data } = props;
   console.log(classes);
   return (
     <Router>
