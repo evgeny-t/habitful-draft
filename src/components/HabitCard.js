@@ -9,7 +9,7 @@ import Typography from "material-ui/Typography";
 import Card, { CardActions, CardContent } from "material-ui/Card";
 import { withStyles } from "material-ui/styles";
 
-import { Calendar } from "./components/Calendar";
+import { Calendar } from "./Calendar";
 
 
 export const HabitCard = withStyles(theme => ({

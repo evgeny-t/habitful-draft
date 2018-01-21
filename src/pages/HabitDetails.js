@@ -33,9 +33,7 @@ import AddIcon from 'material-ui-icons/Add';
 import Checkbox from "material-ui/Checkbox";
 import { withStyles } from "material-ui/styles";
 
-import * as data from "./data.json";
-import { HabitCard } from './HabitCard';
-import { Header } from './components/Header';
+import { HabitCard, Header } from '../components';
 
 export const HabitDetails = withStyles(theme => console.log(theme) || ({
   content: {
@@ -55,7 +53,7 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
 
     render() {
       const habitKey = this.props.match.params.habitKey;
-      const habit = _.chain(data.habits)
+      const habit = _.chain(this.props.data.habits)
         .find(h => _.kebabCase(h.routine) === habitKey)
         .value();
       return (
