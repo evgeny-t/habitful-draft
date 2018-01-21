@@ -30,7 +30,7 @@ export const HabitCard = withStyles(theme => ({
             </Typography>
             <Calendar
               itemColor={this.getItemColor}
-              today={moment("20180104")}
+              today={moment(this.props.today)}
             />
           </CardContent>
         </Card>

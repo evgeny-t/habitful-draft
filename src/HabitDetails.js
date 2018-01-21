@@ -36,6 +36,7 @@ import { withStyles } from "material-ui/styles";
 import * as data from "./data.json";
 import { Calendar } from "./Calendar";
 import { HabitCard } from './HabitCard';
+import { Header } from './Header';
 
 export const HabitDetails = withStyles(theme => console.log(theme) || ({
   content: {
@@ -59,63 +60,66 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
         .find(h => _.kebabCase(h.routine) === habitKey)
         .value();
       return (
-        <div className={this.props.classes.content}>
-          <HabitCard {...habit} today={this.props.today} />
-          <List dense className={this.props.classes.list}>
-            {_.chain(habit.history)
-              .takeRight(10)
-              .reverse()
-              .map(entry => (
-                <ListItem>
-                  <Checkbox checked={true} />
-                  <ListItemText 
-                    primary={`${entry.when.from(this.props.today)}`} 
-                  />
-                </ListItem>
-              ))
-              .value()}
-          </List>
-          <Zoom
-            appear={true}
-            in={true}
-            timeout={this.props.theme.transitions.duration.enteringScreen}
-            enterDelay={this.props.theme.transitions.duration.leavingScreen}
-            unmountOnExit
-          >
-            <Button 
-              fab 
-              className={this.props.classes.fab} 
-              color='primary'
-              onClick={this._handleAddClick}
+        <div>
+          <Header title={habit.routine} />
+          <div className={this.props.classes.content}>
+            <HabitCard {...habit} today={this.props.today} />
+            <List dense className={this.props.classes.list}>
+              {_.chain(habit.history)
+                .takeRight(10)
+                .reverse()
+                .map(entry => (
+                  <ListItem>
+                    <Checkbox checked={true} />
+                    <ListItemText 
+                      primary={`${entry.when.from(this.props.today)}`} 
+                    />
+                  </ListItem>
+                ))
+                .value()}
+            </List>
+            <Zoom
+              appear={true}
+              in={true}
+              timeout={this.props.theme.transitions.duration.enteringScreen}
+              enterDelay={this.props.theme.transitions.duration.leavingScreen}
+              unmountOnExit
             >
-              <AddIcon />
-            </Button>
-          </Zoom>
+              <Button 
+                fab 
+                className={this.props.classes.fab} 
+                color='primary'
+                onClick={this._handleAddClick}
+              >
+                <AddIcon />
+              </Button>
+            </Zoom>
 
-          
-          <Dialog
-            open={this.state.addModalOpen}
-            onClose={this._handleModalClose}
-          >
-            <DialogTitle>Add Entry</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Add missing entry
-              </DialogContentText>
-              <DayPicker 
-                selectedDays={this.state.selectedDay}
-                onDayClick={this._handleDayClick}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this._handleModalClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={this._handleModalClose} color="primary">
-                Add
-              </Button>
-            </DialogActions>
-          </Dialog>
+
+            <Dialog
+              open={this.state.addModalOpen}
+              onClose={this._handleModalClose}
+            >
+              <DialogTitle>Add Entry</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Add missing entry
+                </DialogContentText>
+                <DayPicker 
+                  selectedDays={this.state.selectedDay}
+                  onDayClick={this._handleDayClick}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this._handleModalClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={this._handleModalClose} color="primary">
+                  Add
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </div>
       );
     }
