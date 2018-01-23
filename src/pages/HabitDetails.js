@@ -46,7 +46,7 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
   },
 }), { withTheme: true })(
   class extends React.Component {
-    state = { 
+    state = {
       addModalOpen: false,
       selectedDay: null,
     }
@@ -66,10 +66,10 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
                 .takeRight(10)
                 .reverse()
                 .map(entry => (
-                  <ListItem>
+                  <ListItem key={entry.when.format()}>
                     <Checkbox checked={true} />
-                    <ListItemText 
-                      primary={`${entry.when.from(this.props.today)}`} 
+                    <ListItemText
+                      primary={`${entry.when.from(this.props.today)}`}
                     />
                   </ListItem>
                 ))
@@ -82,9 +82,9 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
               enterDelay={this.props.theme.transitions.duration.leavingScreen}
               unmountOnExit
             >
-              <Button 
-                fab 
-                className={this.props.classes.fab} 
+              <Button
+                fab
+                className={this.props.classes.fab}
                 color='primary'
                 onClick={this._handleAddClick}
               >
@@ -102,7 +102,7 @@ export const HabitDetails = withStyles(theme => console.log(theme) || ({
                 <DialogContentText>
                   Add missing entry
                 </DialogContentText>
-                <DayPicker 
+                <DayPicker
                   selectedDays={this.state.selectedDay}
                   onDayClick={this._handleDayClick}
                 />

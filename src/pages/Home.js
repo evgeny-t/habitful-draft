@@ -40,7 +40,7 @@ const Checklist = withStyles(checklistStyles)(
               {_(habits)
                 .filter(h => !moment(_.last(h.history)).isSame(this.props.today, "day"))
                 .map(h => (
-                  <ListItem>
+                  <ListItem key={`${h.routine}`}>
                     <Checkbox />
                     <ListItemText primary={`${h.routine}`} />
                   </ListItem>
@@ -80,7 +80,9 @@ export const Home = withStyles({
           <div className={this.props.classes.content}>
             <Checklist {...data} today={this.props.today} />
             <div className={this.props.classes.habits}>
-              {data.habits.map(h => <HabitCard {...h} today={this.props.today} />)}
+              {data.habits.map(h => (
+                <HabitCard key={h.routine} {...h} today={this.props.today} />
+              ))}
             </div>
           </div>
         </div>
