@@ -3,6 +3,8 @@ import moment from 'moment';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
+import Module from './dux';
+
 import * as data from './data.json';
 
 data.habits.forEach(h =>
@@ -10,7 +12,7 @@ data.habits.forEach(h =>
 );
 
 export const store = createStore(
-  _.identity,
+  Module.reducer,
   Object.assign({}, data, { today: moment('2017-12-31') }),
   applyMiddleware(thunk)
 );

@@ -14,6 +14,10 @@ import { withStyles } from 'material-ui/styles';
 
 import { HabitCard, Header } from '../components';
 
+import Module from '../dux';
+const { completeRoutine } = Module;
+console.log('completeRoutine', completeRoutine);
+
 const checklistStyles = {
   root: {
     // border: '1px dashed blue',
@@ -44,7 +48,13 @@ const Checklist = withStyles(checklistStyles)(
                 )
                 .map(h => (
                   <ListItem key={`${h.routine}`}>
-                    <Checkbox />
+                    <Checkbox
+                      inputProps={{
+                        'data-id': h._id,
+                        'data-routine': h.routine
+                      }}
+                      onChange={this._handleCheckBoxChange}
+                    />
                     <ListItemText primary={`${h.routine}`} />
                   </ListItem>
                 ))
@@ -54,6 +64,11 @@ const Checklist = withStyles(checklistStyles)(
         </div>
       );
     }
+
+    _handleCheckBoxChange = (event, value) => {
+      const { onItemCheck } = this.props;
+      onItemCheck && onItemCheck(event.currentTarget.dataset.id);
+    };
   }
 );
 
@@ -75,7 +90,11 @@ export const Home = _.flow(
       // flexWrap: 'wrap',
     }
   }),
-  connect(_.identity)
+  connect(_.identity, dispatch => {
+    return {
+      onItemCheck: id => dispatch(completeRoutine(id))
+    };
+  })
 )(
   class extends React.Component {
     render() {
@@ -83,9 +102,9 @@ export const Home = _.flow(
       return (
         <div>
           <Header title="habitful" />
-          <div className={this.props.classes.content}>
-            <Checklist {...rest} today={this.props.today} />
-            <div className={this.props.classes.habits}>
+          <div className={classes.content}>
+            <Checklist {...rest} />
+            <div className={classes.habits}>
               {this.props.habits.map(h => (
                 <HabitCard key={h.routine} {...h} today={this.props.today} />
               ))}
