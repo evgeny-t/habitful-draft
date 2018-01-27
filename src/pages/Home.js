@@ -1,31 +1,31 @@
-import _ from "lodash";
-import React from "react";
-import { render } from "react-dom";
-import moment from "moment";
+import _ from 'lodash';
+import React from 'react';
+import moment from 'moment';
+import { connect } from 'react-redux';
 
-import Card, { CardActions, CardContent } from "material-ui/Card";
+import Card, { CardActions, CardContent } from 'material-ui/Card';
 import List, {
   ListItem,
   ListItemSecondaryAction,
   ListItemText
-} from "material-ui/List";
-import Checkbox from "material-ui/Checkbox";
-import { withStyles } from "material-ui/styles";
+} from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
+import { withStyles } from 'material-ui/styles';
 
 import { HabitCard, Header } from '../components';
 
 const checklistStyles = {
   root: {
     // border: '1px dashed blue',
-    width: "30%",
+    width: '30%',
     flexShrink: 0,
-    minWidth: "300px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "start"
+    minWidth: '300px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'start'
   },
   list: {
-    maxWidth: "300px"
+    maxWidth: '300px'
   }
 };
 
@@ -38,7 +38,10 @@ const Checklist = withStyles(checklistStyles)(
           <Card>
             <List dense className={classes.list}>
               {_(habits)
-                .filter(h => !moment(_.last(h.history)).isSame(this.props.today, "day"))
+                .filter(
+                  h =>
+                    !moment(_.last(h.history)).isSame(this.props.today, 'day')
+                )
                 .map(h => (
                   <ListItem key={`${h.routine}`}>
                     <Checkbox />
@@ -54,33 +57,36 @@ const Checklist = withStyles(checklistStyles)(
   }
 );
 
-export const Home = withStyles({
-  habits: {
-    width: "100%",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  },
-  content: {
-    paddingTop: 80,
-    // height: '100vh',
-    // background: '#ff11fe',
+export const Home = _.flow(
+  withStyles({
+    habits: {
+      width: '100%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center'
+    },
+    content: {
+      paddingTop: 80,
+      // height: '100vh',
+      // background: '#ff11fe',
 
-    display: "flex",
-    flexDirection: "row"
-    // flexWrap: 'wrap',
-  },
-})(
+      display: 'flex',
+      flexDirection: 'row'
+      // flexWrap: 'wrap',
+    }
+  }),
+  connect(_.identity)
+)(
   class extends React.Component {
     render() {
-      const { data } = this.props;
+      const { classes, ...rest } = this.props;
       return (
         <div>
           <Header title="habitful" />
           <div className={this.props.classes.content}>
-            <Checklist {...data} today={this.props.today} />
+            <Checklist {...rest} today={this.props.today} />
             <div className={this.props.classes.habits}>
-              {data.habits.map(h => (
+              {this.props.habits.map(h => (
                 <HabitCard key={h.routine} {...h} today={this.props.today} />
               ))}
             </div>
@@ -89,4 +95,4 @@ export const Home = withStyles({
       );
     }
   }
-  );
+);

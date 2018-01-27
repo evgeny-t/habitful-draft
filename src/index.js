@@ -1,54 +1,28 @@
-import _ from "lodash";
-import React from "react";
-import { render } from "react-dom";
-import moment from "moment";
+import _ from 'lodash';
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, } from 'react-router-dom';
 
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import { withStyles } from "material-ui/styles";
-
-import * as data from "./data.json";
+import { withStyles } from 'material-ui/styles';
 
 import { HabitDetails, Home } from './pages';
+import { store } from './configureStore';
 
-data.habits.forEach(h =>
-  h.history.forEach(entry => (entry.when = moment(entry.when)))
-);
+const stylesEnhancer = withStyles({});
 
-const TODAY = "2017-12-31";
-
-console.log(data);
-
-
-const App = withStyles({
-  habits: {
-    width: "100%",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  }
-})(function (props) {
-  const { classes, data } = props;
-  console.log(classes);
+const App = _.flow(stylesEnhancer)(function(props) {
   return (
-    <Router>
-      <div>
-        <Route 
-          exact path="/" 
-          component={props => 
-            <Home {...props} data={data} today={TODAY} />
-          } 
-        />
-        <Route 
-          path="/:habitKey" 
-          component={props => 
-            <HabitDetails {...props} data={data} today={TODAY} />
-          } 
-        />
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div>
+          <Route exact path="/" component={Home} />
+          <Route path="/:habitKey" component={HabitDetails} />
+        </div>
+      </Router>
+    </Provider>
   );
 });
 
-render(<App data={data} />, document.querySelector("#root"));
+render(<App />, document.querySelector('#root'));

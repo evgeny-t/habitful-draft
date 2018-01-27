@@ -1,23 +1,24 @@
-import _ from "lodash";
-import React from "react";
+import _ from 'lodash';
+import React from 'react';
+import { connect } from 'react-redux';
 
-import DayPicker from "react-day-picker";
-import "react-day-picker/lib/style.css";
+import DayPicker from 'react-day-picker';
+import 'react-day-picker/lib/style.css';
 
-import Button from "material-ui/Button";
+import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle
-} from "material-ui/Dialog";
-import List, { ListItem, ListItemText } from "material-ui/List";
-import Zoom from "material-ui/transitions/Zoom";
-import AddIcon from "material-ui-icons/Add";
-import Checkbox from "material-ui/Checkbox";
-import { withStyles } from "material-ui/styles";
+} from 'material-ui/Dialog';
+import List, { ListItem, ListItemText } from 'material-ui/List';
+import Zoom from 'material-ui/transitions/Zoom';
+import AddIcon from 'material-ui-icons/Add';
+import Checkbox from 'material-ui/Checkbox';
+import { withStyles } from 'material-ui/styles';
 
-import { HabitCard, Header } from "../components";
+import { HabitCard, Header } from '../components';
 
 class HabitHistory extends React.PureComponent {
   render() {
@@ -38,19 +39,22 @@ class HabitHistory extends React.PureComponent {
   }
 }
 
-export const HabitDetails = withStyles(
-  theme =>
-    console.log(theme) || {
-      content: {
-        paddingTop: 80
+export const HabitDetails = _.flow(
+  withStyles(
+    theme =>
+      console.log(theme) || {
+        content: {
+          paddingTop: 80
+        },
+        fab: {
+          position: 'fixed',
+          bottom: theme.spacing.unit * 3,
+          right: theme.spacing.unit * 3
+        }
       },
-      fab: {
-        position: "fixed",
-        bottom: theme.spacing.unit * 3,
-        right: theme.spacing.unit * 3
-      }
-    },
-  { withTheme: true }
+    { withTheme: true }
+  ),
+  connect(_.identity)
 )(
   class extends React.Component {
     state = {
@@ -60,7 +64,7 @@ export const HabitDetails = withStyles(
 
     render() {
       const habitKey = this.props.match.params.habitKey;
-      const habit = _.chain(this.props.data.habits)
+      const habit = _.chain(this.props.habits)
         .find(h => _.kebabCase(h.routine) === habitKey)
         .value();
       return (
