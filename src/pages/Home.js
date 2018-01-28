@@ -90,11 +90,12 @@ export const Home = _.flow(
       // flexWrap: 'wrap',
     }
   }),
-  connect(_.identity, dispatch => {
+  connect(_.constant({}), (dispatch, { today }) => {
     return {
-      onItemCheck: id => dispatch(completeRoutine(id))
+      onItemCheck: id => dispatch(completeRoutine(id, today))
     };
-  })
+  }),
+  connect(_.identity)
 )(
   class extends React.Component {
     render() {
