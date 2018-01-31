@@ -3,7 +3,20 @@ import { createStore } from 'redux';
 
 import Dux from './dux';
 
-const f = Object.freeze;
+function deepFreeze (o) {
+  Object.freeze(o);
+
+  Object.getOwnPropertyNames(o).forEach(function (prop) {
+    if (o.hasOwnProperty(prop)
+    && o[prop] !== null
+    && (typeof o[prop] === "object" || typeof o[prop] === "function")
+    && !Object.isFrozen(o[prop])) {
+      deepFreeze(o[prop]);
+    }
+  });
+
+  return o;
+}
 
 describe('dux', () => {
   describe('completeRoutine', () => {
@@ -11,8 +24,8 @@ describe('dux', () => {
       const today = moment('1990-12-13');
       const store = createStore(
         Dux.reducer,
-        f({
-          habits: f([f({ _id: 1, history: f([]) })])
+        deepFreeze({
+          habits: [{ _id: 1, history: [] }]
         })
       );
 

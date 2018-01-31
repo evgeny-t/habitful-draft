@@ -1,6 +1,8 @@
 import _ from 'lodash';
+import moment from 'moment';
 import { dux } from 'redux-dux';
 import produce from 'immer';
+import { createSelector } from 'reselect';
 
 export default dux({
   completeRoutine: produce((state, id, today) => {
@@ -15,3 +17,14 @@ export default dux({
     return state;
   })
 });
+
+export const selectors = {
+  todo: today =>
+    createSelector(
+      state => state.habits,
+      habits =>
+        _(habits).filter(
+          h => !moment(_.last(h.history)).isSame(this.props.today, 'day')
+        )
+    )
+};
