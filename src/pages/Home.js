@@ -44,7 +44,10 @@ const Checklist = withStyles(checklistStyles)(
               {_(habits)
                 .filter(
                   h =>
-                    !moment(_.last(h.history)).isSame(this.props.today, 'day')
+                    !moment(_.get(_.last(h.history), 'when')).isSame(
+                      this.props.today,
+                      'day'
+                    )
                 )
                 .map(h => (
                   <ListItem key={`${h.routine}`}>
