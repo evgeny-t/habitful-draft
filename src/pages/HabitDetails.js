@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -19,6 +20,9 @@ import Checkbox from 'material-ui/Checkbox';
 import { withStyles } from 'material-ui/styles';
 
 import { HabitCard, Header } from '../components';
+
+import Module from '../dux';
+const { addHistoryEntry } = Module;
 
 class HabitHistory extends React.PureComponent {
   render() {
@@ -54,7 +58,23 @@ export const HabitDetails = _.flow(
       },
     { withTheme: true }
   ),
-  connect(_.identity)
+  connect(
+    _.identity,
+    dispatch => {
+      return {
+        addHistoryEntry: (id, date) => {
+          dispatch(addHistoryEntry(id, date));
+        }
+      };
+    },
+    (stateProps, dispatchProps, ownProps) => {
+      const habitKey = ownProps.match.params.habitKey;
+      const habit = _.chain(stateProps.habits)
+        .find(h => _.kebabCase(h.routine) === habitKey)
+        .value();
+      return Object.assign({ habit }, ownProps, stateProps, dispatchProps);
+    }
+  )
 )(
   class extends React.Component {
     state = {
@@ -63,10 +83,7 @@ export const HabitDetails = _.flow(
     };
 
     render() {
-      const habitKey = this.props.match.params.habitKey;
-      const habit = _.chain(this.props.habits)
-        .find(h => _.kebabCase(h.routine) === habitKey)
-        .value();
+      const { habit } = this.props;
       return (
         <div>
           <Header title={habit.routine} />
@@ -106,7 +123,7 @@ export const HabitDetails = _.flow(
                 <Button onClick={this._handleModalClose} color="primary">
                   Cancel
                 </Button>
-                <Button onClick={this._handleModalClose} color="primary">
+                <Button onClick={this._handleSubmit} color="primary">
                   Add
                 </Button>
               </DialogActions>
@@ -127,6 +144,14 @@ export const HabitDetails = _.flow(
     };
 
     _handleModalClose = () => {
+      this.setState({ addModalOpen: false });
+    };
+
+    _handleSubmit = () => {
+      this.props.addHistoryEntry(
+        this.props.habit._id,
+        moment(this.state.selectedDay)
+      );
       this.setState({ addModalOpen: false });
     };
   }
