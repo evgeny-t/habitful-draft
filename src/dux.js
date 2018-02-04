@@ -5,6 +5,7 @@ import produce from 'immer';
 import { createSelector } from 'reselect';
 
 const missingArg = name => new Error(`missing argument: ${name}`);
+const momentsComparer = (l, r) => (l.when.isBefore(r.when) ? -1 : 1);
 
 export default dux({
   completeRoutine: produce((state, id, today) => {
@@ -26,11 +27,25 @@ export default dux({
     const habit = _.find(state.habits, ['_id', id]);
     if (habit) {
       habit.history.push({ when: date });
+      habit.history.sort(momentsComparer);
     }
     return state;
   }),
 
-  removeHistoryEntry: produce((state, when) => {
+  removeHistoryEntry: produce((state, id, when) => {
+    if (!id) throw missingArg('id');
+
+    const habit = _.find(state.habits, ['_id', id]);
+    if (habit) {
+      const index = _.findIndex(habit.history, ['when', when]);
+      if (index >= 0) {
+        const temp = habit.history
+          .slice(0, index)
+          .concat(habit.history.slice(index + 1, habit.history.length));
+        temp.sort(momentsComparer);
+        habit.history = temp;
+      }
+    }
     return state;
   })
 });

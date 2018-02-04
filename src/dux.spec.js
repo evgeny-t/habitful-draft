@@ -39,7 +39,44 @@ describe('dux', () => {
   });
 
   describe('addHistoryEntry', () => {
-    it('should add a history entry and keep entries ordered');
+    it('should add a history entry and keep entries ordered', () => {
+      const store = createStore(
+        Dux.reducer,
+        deepFreeze({
+          habits: [
+            {
+              _id: 1,
+              history: [{ when: moment('1990-12-30') }]
+            },
+            {
+              _id: 2,
+              history: [
+                { when: moment('1990-12-29') },
+                { when: moment('1990-12-31') }
+              ]
+            }
+          ]
+        })
+      );
+
+      store.dispatch(Dux.addHistoryEntry(2, moment('1990-12-30')));
+      expect(store.getState()).toMatchObject({
+        habits: [
+          {
+            _id: 1,
+            history: [{ when: moment('1990-12-30') }]
+          },
+          {
+            _id: 2,
+            history: [
+              { when: moment('1990-12-29') },
+              { when: moment('1990-12-30') },
+              { when: moment('1990-12-31') }
+            ]
+          }
+        ]
+      });
+    });
   });
 
   describe('removeHistoryEntry', () => {
