@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import DayPicker from 'react-day-picker';
@@ -25,6 +26,13 @@ import Module from '../dux';
 const { addHistoryEntry } = Module;
 
 class HabitHistory extends React.PureComponent {
+  static propTypes = {
+    today: PropTypes.object.isRequired,
+    habit: PropTypes.shape({
+      history: PropTypes.array.isRequired
+    }).isRequired
+  };
+
   render() {
     return (
       <List dense className={this.props.className}>
@@ -34,7 +42,10 @@ class HabitHistory extends React.PureComponent {
           .map(entry => (
             <ListItem key={entry.when.format()}>
               <Checkbox checked={true} />
-              <ListItemText primary={`${entry.when.from(this.props.today)}`} />
+              <ListItemText
+                primary={`${entry.when.from(this.props.today)}`}
+                secondary={entry.when.format('ll')}
+              />
             </ListItem>
           ))
           .value()}
@@ -89,7 +100,11 @@ export const HabitDetails = _.flow(
           <Header title={habit.routine} />
           <div className={this.props.classes.content}>
             <HabitCard {...habit} today={this.props.today} />
-            <HabitHistory className={this.props.classes.list} habit={habit} />
+            <HabitHistory
+              className={this.props.classes.list}
+              habit={habit}
+              today={this.props.today}
+            />
             <Zoom
               appear={true}
               in={true}
