@@ -59,7 +59,7 @@ describe('dux', () => {
         })
       );
 
-      store.dispatch(Dux.addHistoryEntry(2, moment('1990-12-30')));
+      store.dispatch(Dux.addHistoryEntry(2, moment('19901230')));
       expect(store.getState()).toMatchObject({
         habits: [
           {
@@ -100,7 +100,7 @@ describe('dux', () => {
           ]
         })
       );
-      store.dispatch(Dux.removeHistoryEntry(2, moment('1990-12-30')));
+      store.dispatch(Dux.removeHistoryEntry(2, moment('19901230')));
       expect(store.getState()).toMatchObject({
         habits: [
           {
