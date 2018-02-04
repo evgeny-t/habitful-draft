@@ -21,7 +21,7 @@ import { withStyles } from 'material-ui/styles';
 import { HabitCard, Header, HabitHistory } from '../components';
 
 import Module from '../dux';
-const { addHistoryEntry } = Module;
+const { addHistoryEntry, removeHistoryEntry } = Module;
 
 export const HabitDetails = _.flow(
   withStyles(
@@ -42,8 +42,11 @@ export const HabitDetails = _.flow(
     _.identity,
     dispatch => {
       return {
-        addHistoryEntry: (id, date) => {
+        addHistoryEntry(id, date) {
           dispatch(addHistoryEntry(id, date));
+        },
+        onEntryChange(id, date) {
+          dispatch(removeHistoryEntry(id, date));
         }
       };
     },
@@ -73,6 +76,7 @@ export const HabitDetails = _.flow(
               className={this.props.classes.list}
               habit={habit}
               today={this.props.today}
+              onEntryChange={this.props.onEntryChange}
             />
             <Zoom
               appear={true}

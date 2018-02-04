@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -21,7 +22,14 @@ export class HabitHistory extends React.PureComponent {
           .reverse()
           .map(entry => (
             <ListItem key={entry.when.format()}>
-              <Checkbox checked={true} />
+              <Checkbox
+                defaultChecked={true}
+                inputProps={{
+                  'data-id': this.props.habit._id,
+                  'data-when': entry.when.toISOString()
+                }}
+                onChange={this._handleCheckboxChange}
+              />
               <ListItemText
                 primary={`${entry.when.from(this.props.today)}`}
                 secondary={entry.when.format('ll')}
@@ -32,4 +40,11 @@ export class HabitHistory extends React.PureComponent {
       </List>
     );
   }
+
+  _handleCheckboxChange = event => {
+    console.log(event.currentTarget);
+    const { onEntryChange } = this.props;
+    const ds = event.currentTarget.dataset;
+    onEntryChange && onEntryChange(ds.id, moment(ds.when));
+  };
 }
