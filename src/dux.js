@@ -28,6 +28,10 @@ export default dux({
       habit.history.push({ when: date });
     }
     return state;
+  }),
+
+  removeHistoryEntry: produce((state, when) => {
+    return state;
   })
 });
 
