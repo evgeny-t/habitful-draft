@@ -37,7 +37,9 @@ export default dux({
 
     const habit = _.find(state.habits, ['_id', id]);
     if (habit) {
-      const index = _.findIndex(habit.history, ['when', when]);
+      const index = _.findIndex(habit.history, entry =>
+        entry.when.isSame(when, 'day')
+      );
       if (index >= 0) {
         const temp = habit.history
           .slice(0, index)
