@@ -138,7 +138,7 @@ export const HabitDetails = _.flow(
     _handleSubmit = () => {
       this.props.addHistoryEntry(
         this.props.habit._id,
-        moment(this.state.selectedDay)
+        moment(this.state.selectedDay).startOf('day')
       );
       this.setState({ addModalOpen: false });
     };
