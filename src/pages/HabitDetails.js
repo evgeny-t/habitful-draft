@@ -71,7 +71,7 @@ export const HabitDetails = _.flow(
         <div>
           <Header title={habit.routine} />
           <div className={this.props.classes.content}>
-            <HabitCard {...habit} today={this.props.today} />
+            <HabitCard {...habit} today={this.props.today} numberOfWeeks={50} />
             <HabitHistory
               className={this.props.classes.list}
               habit={habit}

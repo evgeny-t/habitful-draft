@@ -6,7 +6,6 @@ const styles = theme => ({
   outer: {
     '& svg': {
       height: '100px',
-      width: '100%',
     },
     '& svg text': {
       fontFamily: theme.typography.fontFamily,
@@ -40,6 +39,7 @@ export const Calendar = withStyles(styles)(
       const step = itemSize + itemsDistance;
       const paddingLeft = 24;
       const paddingTop = 15;
+      const svgWidth = columns * step + paddingLeft * 2;
       const fdow = moment(this.props.today).day(0);
 
       for (let i = 0; i < columns; ++i) {
@@ -92,7 +92,7 @@ export const Calendar = withStyles(styles)(
 
       return (
         <div className={outer}>
-          <svg>{rects}</svg>
+          <svg width={svgWidth}>{rects}</svg>
         </div>
       );
     }

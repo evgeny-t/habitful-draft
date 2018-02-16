@@ -42,6 +42,7 @@ export const HabitCard = withStyles(
             </Typography>
 
             <Calendar
+              columns={props.numberOfWeeks}
               itemColor={this.getItemColor}
               today={moment(this.props.today)}
             />
