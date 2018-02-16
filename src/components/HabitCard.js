@@ -13,7 +13,15 @@ import { Calendar } from './Calendar';
 export const HabitCard = withStyles(
   theme => ({
     card: {
-      margin: 10
+      display: 'inline-block'
+    },
+    link: {
+      color: theme.palette.primary[900],
+      textDecoration: 'none',
+
+      '&:hover': {
+        textDecoration: 'underline'
+      }
     }
   }),
   { withTheme: true }
@@ -25,8 +33,14 @@ export const HabitCard = withStyles(
         <Card className={props.classes.card}>
           <CardContent>
             <Typography>
-              <Link to={`/${_.kebabCase(props.routine)}`}>{props.routine}</Link>
+              <Link
+                className={props.classes.link}
+                to={`/${_.kebabCase(props.routine)}`}
+              >
+                {props.routine}
+              </Link>
             </Typography>
+
             <Calendar
               itemColor={this.getItemColor}
               today={moment(this.props.today)}
