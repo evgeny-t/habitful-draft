@@ -9,16 +9,11 @@ import { withStyles } from 'material-ui/styles';
 
 const checklistStyles = {
   root: {
-    width: '30%',
-    flexShrink: 0,
-    minWidth: '300px',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'start'
+    alignItems: 'center'
   },
-  list: {
-    maxWidth: '300px'
-  }
+  list: {}
 };
 
 export const Checklist = withStyles(checklistStyles)(
