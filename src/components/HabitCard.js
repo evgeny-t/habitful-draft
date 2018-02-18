@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import moment from 'moment';
+import cx from 'classnames';
 
 import { Link } from 'react-router-dom';
 
@@ -30,7 +31,7 @@ export const HabitCard = withStyles(
     render() {
       const props = this.props;
       return (
-        <Card className={props.classes.card}>
+        <Card className={cx(props.classes.card, this.props.className)}>
           <CardContent>
             <Typography>
               <Link

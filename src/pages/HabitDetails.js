@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-import Button from 'material-ui/Button';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -17,6 +16,7 @@ import Dialog, {
 import Zoom from 'material-ui/transitions/Zoom';
 import AddIcon from 'material-ui-icons/Add';
 import { withStyles } from 'material-ui/styles';
+import { Paper, Grid, Button } from 'material-ui';
 
 import { HabitCard, Header, HabitHistory } from '../components';
 
@@ -70,14 +70,25 @@ export const HabitDetails = _.flow(
       return (
         <div>
           <Header title={habit.routine} />
-          <div className={this.props.classes.content}>
-            <HabitCard {...habit} today={this.props.today} numberOfWeeks={50} />
-            <HabitHistory
-              className={this.props.classes.list}
-              habit={habit}
-              today={this.props.today}
-              onEntryChange={this.props.onEntryChange}
-            />
+          <Grid className={this.props.classes.content} container>
+            <Grid item container xs={12} justify="center">
+              <HabitCard
+                {...habit}
+                today={this.props.today}
+                numberOfWeeks={50}
+              />
+            </Grid>
+            <Grid item container justify="center">
+              <Grid item xs={4}>
+                <Paper>
+                  <HabitHistory
+                    habit={habit}
+                    today={this.props.today}
+                    onEntryChange={this.props.onEntryChange}
+                  />
+                </Paper>
+              </Grid>
+            </Grid>
             <Zoom
               appear={true}
               in={true}
@@ -116,7 +127,7 @@ export const HabitDetails = _.flow(
                 </Button>
               </DialogActions>
             </Dialog>
-          </div>
+          </Grid>
         </div>
       );
     }
