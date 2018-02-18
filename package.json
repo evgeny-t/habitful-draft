@@ -3,6 +3,7 @@
   "description": null,
   "version": "0.0.44",
   "dependencies": {
+    "classnames": "2.2.5",
     "immer": "^0.8.5",
     "lodash": "4.17.4",
     "material-ui": "1.0.0-beta.27",
